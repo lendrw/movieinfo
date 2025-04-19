@@ -13,25 +13,31 @@ export const BaseLayout: React.FC<IBaseLaoutProps> = ({ children, title }) => {
 
 
     return (
-        <Box height="100%" display="flex" flexDirection="column" gap={1}>
+        <Box 
+            height="100%" 
+            display="flex" 
+            flexDirection="column" 
+            gap={1} 
+            alignItems="center"
+        >
             <Box
                 padding={1} 
-                height={theme.spacing(smDown ? 6 : mdDown ? 8 : 12)} 
+                height={theme.spacing(smDown ? 6 : mdDown ? 8 : 9)} 
                 display="flex" 
                 alignItems="center" 
                 gap={1}
             >
                 <Typography 
-                        variant={smDown ? "h5" : mdDown ? "h4" : "h3"}
+                        variant={smDown ? "h5" : mdDown ? "h4" : "h4"}
                         whiteSpace="nowrap"
                         overflow="hidden"
                         textOverflow="ellipsis"
+                        width="100%"
+                        textAlign="center"
                     >
                         {title}
                 </Typography>
             </Box>
-
-
             {children}
         </Box>
     )
