@@ -2,9 +2,6 @@ import { Box, Button, Card, CardContent, CardMedia, Icon, Typography } from "@mu
 import React from "react";
 import { Environment } from "../../environment";
 import { useNavigate } from "react-router-dom";
-
-
-
 interface IMovieCardProps {
     id: number;
     poster: string;

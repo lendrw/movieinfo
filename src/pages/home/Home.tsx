@@ -1,9 +1,10 @@
 import { Box, Grid } from "@mui/material"
 import { BaseLayout } from "../../layouts"
-import { MovieCard } from "../../components"
+import { LinearBuffer, MovieCard } from "../../components"
 import { MovieService, IMoviesList } from "../../services/api/movies/MovieService"
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../hooks"
+
 
 export const Home = () => {
     const [movies, setMovies] = useState<IMoviesList[]>([]);
@@ -36,12 +37,16 @@ export const Home = () => {
             title="Top rated movies"
         >
             <Box sx={{width: {xs: '90%', sm: '95%'}}} display='flex'>
-                <Grid 
-                    container 
-                    margin={2} 
-                    spacing={2}
-                >
-                    {movies.map(movie => (
+                {loading && (
+                    <LinearBuffer/>
+                )}
+                {!loading && (
+                    <Grid 
+                        container 
+                        margin={2} 
+                        spacing={2}
+                    >
+                        {movies.map(movie => (
                             <Grid 
                                 key={movie.id} 
                                 size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
@@ -53,8 +58,9 @@ export const Home = () => {
                                     showLink
                                 />
                             </Grid>
-                    ))}
-                </Grid>
+                        ))}
+                    </Grid>
+                )}
                 
             </Box>
         </BaseLayout>

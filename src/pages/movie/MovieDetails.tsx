@@ -1,6 +1,6 @@
 import { Box } from "@mui/material"
 import { BaseLayout } from "../../layouts"
-import { MovieCard } from "../../components"
+import { LinearBuffer, MovieCard } from "../../components"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { getById, IMovieDetails, MovieService } from "../../services/api/movies/MovieService"
@@ -25,25 +25,26 @@ export const MovieDetails = ( ) => {
             })
     }, [id]);
 
-    if (!movie) {
+    if (!movie || loading) {
         return (
           <BaseLayout title="Loading...">
-            <Box>Carregando detalhes do filme...</Box>
+            <LinearBuffer/>
           </BaseLayout>
         );
       }
-      
 
     return (
         <BaseLayout title={movie.title}>
-            <Box>
-                <MovieCard
+            {!loading && (
+                <Box>
+                    <MovieCard
                         id={movie.id}
                         title={movie.title}
                         poster={movie.poster_path}
                         vote_average={movie.vote_average}
-                />               
-            </Box>
+                    />               
+                </Box>
+            )}
         </BaseLayout>
     )
 }
