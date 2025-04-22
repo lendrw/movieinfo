@@ -35,19 +35,22 @@ export const Home = () => {
         <BaseLayout
             title="Top rated movies"
         >
-            <Box width='95%' display='flex'>
+            <Box sx={{width: {xs: '90%', sm: '95%'}}} display='flex'>
                 <Grid 
                     container 
                     margin={2} 
                     spacing={2}
                 >
                     {movies.map(movie => (
-                            <Grid key={movie.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 3 }}>
+                            <Grid 
+                                key={movie.id} 
+                                size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
                                 <MovieCard
                                     id={movie.id}
                                     title={movie.title}
                                     poster={movie.poster_path}
                                     vote_average={movie.vote_average}
+                                    showLink
                                 />
                             </Grid>
                     ))}

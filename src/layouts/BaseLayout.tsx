@@ -19,6 +19,7 @@ export const BaseLayout: React.FC<IBaseLaoutProps> = ({ children, title }) => {
             flexDirection="column" 
             gap={1} 
             alignItems="center"
+            marginTop={{xs: '56px', sm: '64px'}}
         >
             <Box
                 padding={1} 
@@ -38,7 +39,9 @@ export const BaseLayout: React.FC<IBaseLaoutProps> = ({ children, title }) => {
                         {title}
                 </Typography>
             </Box>
-            {children}
+            <Box overflow="auto" width='100%' display='flex' justifyContent='center'>
+                {children}
+            </Box>
         </Box>
     )
 }

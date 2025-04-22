@@ -6,6 +6,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import { Button, Icon } from '@mui/material';
+
+import { useAppThemeContext } from '../../contexts/ThemeContext';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -14,8 +17,8 @@ const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginLeft: 0,
-  width: '100%',
+  marginLeft: '5%',
+  width: '85%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(1),
     width: 'auto',
@@ -50,9 +53,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const Navbar: React.FC = () => {
+  const { themeName, toggleTheme } = useAppThemeContext();
+
   return (
     <Box sx={{ flexGrow: 1 }} >
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <Typography
             variant="h6"
@@ -60,8 +65,21 @@ export const Navbar: React.FC = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            MovieInfo
           </Typography>
+          <Icon
+            sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}
+          >
+            menu
+          </Icon>
+          <Button 
+            onClick={toggleTheme}
+            sx={{ display: { xs: 'none', sm: 'flex' } }}
+            >
+              <Icon sx={{ color: '#fff' }}>
+                {themeName === 'dark' ? 'dark_mode' : 'light_mode'}
+              </Icon>
+          </Button>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
