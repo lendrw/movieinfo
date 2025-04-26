@@ -34,15 +34,13 @@ export const LinearBuffer: React.FC = () => {
 
   return (
     <Box
-        sx={{
-            width: '80%',
-            height: '60vh',
-            display: 'flex',
-            alignItems: 'center', 
-            justifyContent: 'center' 
-        }}
-        >
-            <Box sx={{ width: '90%' }}> 
+        display='flex'
+        alignItems='center'
+        justifyContent='center'
+        width='100%'
+        height='60dvh'
+    >
+            <Box width='90%'> 
                 <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} />
             </Box>
         </Box>

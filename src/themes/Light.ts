@@ -21,5 +21,17 @@ export const LightTheme = createTheme({
             paper: '#ffffff',
             default: '#f7f6f3',
         }
+    },
+    components: {
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    color: '#ffffff',
+                    '&:hover': {
+                      backgroundColor: yellow[600],
+                    },
+                  },
+            }
+        }
     }
 });

@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 import { Box, Theme, Typography, useMediaQuery, useTheme } from "@mui/material";
 
-interface IBaseLaoutProps {
+interface IBaseLayoutProps {
     children: ReactNode,
     title: string,
 }
 
-export const BaseLayout: React.FC<IBaseLaoutProps> = ({ children, title }) => {
+export const BaseLayout: React.FC<IBaseLayoutProps> = ({ children, title }) => {
     const theme = useTheme();
     const smDown = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
@@ -14,7 +14,6 @@ export const BaseLayout: React.FC<IBaseLaoutProps> = ({ children, title }) => {
 
     return (
         <Box 
-            height="100%" 
             display="flex" 
             flexDirection="column" 
             gap={1} 
@@ -27,19 +26,19 @@ export const BaseLayout: React.FC<IBaseLaoutProps> = ({ children, title }) => {
                 display="flex" 
                 alignItems="center" 
                 gap={1}
+                margin={1}
             >
                 <Typography 
-                        variant={smDown ? "h5" : mdDown ? "h4" : "h4"}
-                        whiteSpace="nowrap"
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                        width="100%"
-                        textAlign="center"
-                    >
-                        {title}
+                    variant={smDown ? "h5" : mdDown ? "h4" : "h4"}
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                    width="100%"
+                    textAlign="center"
+                >
+                    {title}
                 </Typography>
             </Box>
-            <Box overflow="auto" width='100%' display='flex' justifyContent='center'>
+            <Box display='flex' justifyContent='center'>
                 {children}
             </Box>
         </Box>

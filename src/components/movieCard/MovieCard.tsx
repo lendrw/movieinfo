@@ -4,12 +4,12 @@ import { Environment } from "../../environment";
 import { useNavigate } from "react-router-dom";
 interface IMovieCardProps {
     id: number;
-    poster: string;
     title: string;
+    tagline?: string;
+    poster: string;
     vote_average: number;
     showLink?: boolean;
-    hasOverview?: boolean;
-    overview?: string;
+    variant: string;
 }
 
 const imgURL = Environment.MOVIE_IMG;
@@ -21,35 +21,38 @@ export const MovieCard: React.FC<IMovieCardProps> = (
         title, 
         vote_average, 
         showLink, 
-        hasOverview,
-        overview
+        tagline,
+        variant,
     }
 ) => {
 
     const navigate = useNavigate();
 
     return (
-        <Card>
+        <Card sx={{ maxWidth: 550 }}>
             <CardMedia
+                component="img"
                 image={imgURL + poster}
                 title={title}
-                sx={{ minHeight: 450}}
+                sx={{
+                    objectFit: 'contain', 
+                    width: '100%',
+                    height: '100%', 
+                }}
             />
             <CardContent>
-                <Typography variant="h6" textAlign='center'>
-                    {title}
-                </Typography>
                 <Box
                     display='flex' 
                     justifyContent='center'
                     alignItems='center'
                     flexDirection='column'
+                    gap={1}
                 >
-                    <Typography variant="subtitle1" display='flex'>
-                        <Box display="flex" alignItems="center">
-                            <Icon fontSize="inherit">starrate</Icon>
-                        </Box>
-                        &nbsp;{vote_average.toFixed(2)}
+                    <Typography variant={variant} textAlign='center'>
+                        {title}
+                    </Typography>
+                    <Typography variant="subtitle1" sx={{display: 'flex', alignItems: 'center'}}>
+                        <Icon fontSize="inherit">starrate</Icon>&nbsp;{vote_average.toFixed(2)}
                     </Typography>
 
                         {showLink && (
@@ -61,9 +64,9 @@ export const MovieCard: React.FC<IMovieCardProps> = (
                                 Details
                             </Button>
                         )}
-                        {hasOverview && (
-                            <Typography variant="body1">
-                                {overview}
+                        {tagline && (
+                            <Typography variant="body1" textAlign="center">
+                                {tagline}
                             </Typography>
                         )}
                 </Box>

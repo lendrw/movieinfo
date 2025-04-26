@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Icon } from '@mui/material';
+import { Icon, IconButton } from '@mui/material';
 
 import { useAppThemeContext } from '../../contexts/ThemeContext';
 
@@ -40,7 +40,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: '100%',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     [theme.breakpoints.up('sm')]: {
@@ -72,14 +71,9 @@ export const Navbar: React.FC = () => {
           >
             menu
           </Icon>
-          <Button 
-            onClick={toggleTheme}
-            sx={{ display: { xs: 'none', sm: 'flex' } }}
-            >
-              <Icon sx={{ color: '#fff' }}>
-                {themeName === 'dark' ? 'dark_mode' : 'light_mode'}
-              </Icon>
-          </Button>
+              <IconButton onClick={toggleTheme}>
+                <Icon>{themeName === 'dark' ? 'dark_mode' : 'light_mode'}</Icon>
+              </IconButton>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

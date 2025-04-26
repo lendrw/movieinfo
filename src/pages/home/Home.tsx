@@ -36,7 +36,7 @@ export const Home = () => {
         <BaseLayout
             title="Top rated movies"
         >
-            <Box sx={{width: {xs: '90%', sm: '95%'}}} display='flex'>
+            <Box sx={{width: {xs: '90dvw', sm: '95dvw'}}}>
                 {loading && (
                     <LinearBuffer/>
                 )}
@@ -51,6 +51,7 @@ export const Home = () => {
                                 key={movie.id} 
                                 size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
                                 <MovieCard
+                                    variant={"h6"}
                                     id={movie.id}
                                     title={movie.title}
                                     poster={movie.poster_path}
