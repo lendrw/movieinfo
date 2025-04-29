@@ -36,6 +36,31 @@ type TMovies = {
 
 const key = Environment.api_key;
 const url = Environment.BASE_URL;
+const search = Environment.SEARCH;
+
+const getSearchMovie = async (page = 1, query: string): Promise<TMovies | Error> => {
+    try {
+        const res = await Api.get(`${search}?${key}&query=${query}&page=${page}`);
+
+        const data = res.data;
+
+        return {
+            page: data.page,
+            results: data.results as IMoviesList[],
+            total_pages: data.total_pages,
+            total_results: data.total_results
+        };
+        
+    } catch (error: unknown) {
+        console.error(error);
+    
+        if (error instanceof Error) {
+            return new Error(error.message);
+        }
+    
+        return new Error('Failed to load the movies.');
+    }    
+}
 
 
 const getTopRatedMovies = async (): Promise<TMovies | Error> => {
@@ -48,10 +73,15 @@ const getTopRatedMovies = async (): Promise<TMovies | Error> => {
             data: data.results as IMoviesList[]
         }
         
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(error);
-        return new Error((error as { message: string }).message || 'Failed to load the movies.');
-    }
+    
+        if (error instanceof Error) {
+            return new Error(error.message);
+        }
+    
+        return new Error('Failed to load the movies.');
+    }    
 };
 
 export const getById = async (id: number): Promise<IMovieDetails | Error> => {
@@ -64,13 +94,20 @@ export const getById = async (id: number): Promise<IMovieDetails | Error> => {
         }
         
         return new Error('Failed to load the movie.');
-    } catch (error) {
+        
+    } catch (error: unknown) {
         console.error(error);
-        return new Error((error as { message: string }).message || 'Failed to load the movie.');
+    
+        if (error instanceof Error) {
+            return new Error(error.message);
+        }
+    
+        return new Error('Failed to load the movie.');
     }    
 }
 
 export const MovieService = {
     getTopRatedMovies,
     getById,
+    getSearchMovie,
 };

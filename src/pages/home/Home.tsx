@@ -5,9 +5,8 @@ import { MovieService, IMoviesList } from "../../services/api/movies/MovieServic
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../hooks"
 
-
 export const Home = () => {
-    const [movies, setMovies] = useState<IMoviesList[]>([]);
+    const [topRatedMovies, setTopRatedMovies] = useState<IMoviesList[]>([]);
     const [loading, setLoading] = useState(true);
 
     const { debounce } = useDebounce();
@@ -25,31 +24,30 @@ export const Home = () => {
                         console.log(result);
                     } else {
                         console.log(result);
-
-                        setMovies(result.data);
+                        setTopRatedMovies(result.data);
                     }
                 })
         })
-    }, [debounce])
+    }, [debounce]);
 
     return (
         <BaseLayout
             title="Top rated movies"
         >
-            <Box sx={{width: {xs: '90dvw', sm: '95dvw'}}}>
+            <Box sx={{width: {xs: '95dvw', lg: '90dvw'}}}>
                 {loading && (
                     <LinearBuffer/>
                 )}
                 {!loading && (
                     <Grid 
                         container 
-                        margin={2} 
+                        margin={1} 
                         spacing={2}
                     >
-                        {movies.map(movie => (
+                        {topRatedMovies.map(movie => (
                             <Grid 
                                 key={movie.id} 
-                                size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
+                                size={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 2 }}>
                                 <MovieCard
                                     variant={"h6"}
                                     id={movie.id}

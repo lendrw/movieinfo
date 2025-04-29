@@ -9,6 +9,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Icon, IconButton } from '@mui/material';
 
 import { useAppThemeContext } from '../../contexts/ThemeContext';
+import { useSearchContext } from '../../contexts';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -53,6 +55,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar: React.FC = () => {
   const { themeName, toggleTheme } = useAppThemeContext();
+  const { query, setQuery } = useSearchContext();
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value); 
+
+    if (value.trim() !== '') {
+        navigate(`/search/${value}/1`);
+    } else {
+        navigate(`/home`);
+    }
+};
 
   return (
     <Box sx={{ flexGrow: 1 }} >
@@ -81,6 +96,7 @@ export const Navbar: React.FC = () => {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              onChange={handleChange}
             />
           </Search>
         </Toolbar>
