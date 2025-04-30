@@ -4,7 +4,7 @@ export interface IMovieGenres {
     id: number;
     name: string;
 }
-export interface IMovieDetails {
+export interface IMoviesList {
     id: number;
     title: string;
     tagline: string;
@@ -23,16 +23,13 @@ export interface IMovieDetails {
     popularity: number;
 }
 
-export interface IMoviesList {
-    id: number;
-    title: string;
-    poster_path: string;
-    vote_average: number;
-}
+export type TMovies = {
+    page: number;
+    results: IMoviesList[];
+    total_pages: number;
+    total_results: number;
+  };
 
-type TMovies = {
-    data: IMoviesList[];
-}
 
 const key = Environment.api_key;
 const url = Environment.BASE_URL;
@@ -46,7 +43,7 @@ const getSearchMovie = async (page = 1, query: string): Promise<TMovies | Error>
 
         return {
             page: data.page,
-            results: data.results as IMoviesList[],
+            results: data.results,
             total_pages: data.total_pages,
             total_results: data.total_results
         };
@@ -63,15 +60,18 @@ const getSearchMovie = async (page = 1, query: string): Promise<TMovies | Error>
 }
 
 
-const getTopRatedMovies = async (): Promise<TMovies | Error> => {
+const getTopRatedMovies = async (page = 1): Promise<TMovies | Error> => {
     try {
-        const res = await Api.get(`${url}top_rated?${key}`);
+        const res = await Api.get(`${url}top_rated?${key}&page=${page}`);
 
         const data = res.data;
 
         return {
-            data: data.results as IMoviesList[]
-        }
+            page: data.page,
+            results: data.results,
+            total_pages: data.total_pages,
+            total_results: data.total_results
+        };
         
     } catch (error: unknown) {
         console.error(error);
@@ -84,7 +84,7 @@ const getTopRatedMovies = async (): Promise<TMovies | Error> => {
     }    
 };
 
-export const getById = async (id: number): Promise<IMovieDetails | Error> => {
+export const getById = async (id: number): Promise<IMoviesList | Error> => {
     
     try {
         const { data } = await Api.get(`${url}${id}?${key}`);

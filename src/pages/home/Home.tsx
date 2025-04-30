@@ -1,21 +1,29 @@
-import { Box, Grid } from "@mui/material"
+import { Box, Grid, Pagination } from "@mui/material"
 import { BaseLayout } from "../../layouts"
 import { LinearBuffer, MovieCard } from "../../components"
 import { MovieService, IMoviesList } from "../../services/api/movies/MovieService"
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../../hooks"
+import { useSearchParams } from "react-router-dom";
 
 export const Home = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [topRatedMovies, setTopRatedMovies] = useState<IMoviesList[]>([]);
     const [loading, setLoading] = useState(true);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
 
     const { debounce } = useDebounce();
+
+    const page = useMemo(() => {
+        return Number(searchParams.get('page') || '1');
+    }, [searchParams]);
 
     useEffect(() => {
         setLoading(true);
 
         debounce(() => {
-            MovieService.getTopRatedMovies()
+            MovieService.getTopRatedMovies(Number(page))
                 .then((result) => {
                     setLoading(false);
 
@@ -24,11 +32,13 @@ export const Home = () => {
                         console.log(result);
                     } else {
                         console.log(result);
-                        setTopRatedMovies(result.data);
+                        setTotalCount(result.total_results);
+                        setTotalPages(result.total_pages);
+                        setTopRatedMovies(result.results);
                     }
                 })
         })
-    }, [debounce]);
+    }, [debounce, page]);
 
     return (
         <BaseLayout
@@ -58,10 +68,27 @@ export const Home = () => {
                                 />
                             </Grid>
                         ))}
+                        
                     </Grid>
+                    
+                )}
+                
+                
+                {(!loading && totalCount > 0 && totalCount > 19) && (
+                    <Box margin={3} display='flex' justifyContent='center'>
+                        <Pagination
+                            sx={{display: 'flex'}}
+                            page={page}
+                            count={totalPages}
+                            onChange={(_, newPage) => setSearchParams(
+                                            { page: newPage.toString() }, 
+                                            { replace: true })}
+                        />
+                    </Box>
                 )}
                 
             </Box>
+            
         </BaseLayout>
     )
 }

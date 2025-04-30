@@ -55,7 +55,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar: React.FC = () => {
   const { themeName, toggleTheme } = useAppThemeContext();
-  const { query, setQuery } = useSearchContext();
+  const { setQuery } = useSearchContext();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
