@@ -88,14 +88,16 @@ export const Navbar: React.FC = () => {
         >
           MovieInfo
         </Typography>
-          <Icon
-            sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}
+          <IconButton
+            component={Link}
+            to="/home"
+            sx={{ flexGrow: 1, display: { xs: 'flex', sm: 'none' } }}
           >
-            menu
-          </Icon>
-              <IconButton onClick={toggleTheme}>
-                <Icon>{themeName === 'dark' ? 'dark_mode' : 'light_mode'}</Icon>
-              </IconButton>
+            <Icon>arrow_back</Icon>
+          </IconButton>
+          <IconButton onClick={toggleTheme}>
+            <Icon>{themeName === 'dark' ? 'dark_mode' : 'light_mode'}</Icon>
+          </IconButton>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
