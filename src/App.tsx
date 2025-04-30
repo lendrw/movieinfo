@@ -3,18 +3,18 @@ import { Navbar } from './components';
 import { SearchProvider } from './contexts';
 import { AppThemeProvider } from './contexts/ThemeContext';
 import { AppRoutes } from './routes'
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 function App() {
 
   return (
     <AppThemeProvider>
-      <BrowserRouter>
+      <HashRouter>
         <SearchProvider>
           <Navbar/>
           <AppRoutes/>
         </SearchProvider>
-      </BrowserRouter>
+      </HashRouter>
     </AppThemeProvider>
   )
 }
