@@ -28,10 +28,9 @@ export const Home = () => {
                     setLoading(false);
 
                     if (result instanceof Error) {
-                        alert(result.message)
+                        alert('Invalid page')
                         console.log(result);
                     } else {
-                        console.log(result);
                         setTotalCount(result.total_results);
                         setTotalPages(result.total_pages);
                         setTopRatedMovies(result.results);
@@ -73,20 +72,18 @@ export const Home = () => {
                     
                 )}
                 
-                
                 {(!loading && totalCount > 0 && totalCount > 19) && (
                     <Box margin={3} display='flex' justifyContent='center'>
                         <Pagination
                             sx={{display: 'flex'}}
                             page={page}
-                            count={totalPages}
+                            count={totalPages > 500 ? 500 : totalPages}
                             onChange={(_, newPage) => setSearchParams(
                                             { page: newPage.toString() }, 
                                             { replace: true })}
                         />
                     </Box>
                 )}
-                
             </Box>
             
         </BaseLayout>

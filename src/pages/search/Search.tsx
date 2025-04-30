@@ -26,12 +26,10 @@ export const Search = () => {
             MovieService.getSearchMovie(Number(page), query)
                 .then((result) => {
                     if (result instanceof Error) {
-                        alert(result.message);
-                        console.log(result);
+                        alert('No movies found');
                         setMovies([]);
                     } else {
                         setMovies(result.results); 
-                        console.log('movies:', result.results);
                     }
                     setLoading(false);
                 });

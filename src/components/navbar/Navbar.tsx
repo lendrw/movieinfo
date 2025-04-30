@@ -10,7 +10,7 @@ import { Icon, IconButton } from '@mui/material';
 
 import { useAppThemeContext } from '../../contexts/ThemeContext';
 import { useSearchContext } from '../../contexts';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -73,14 +73,21 @@ export const Navbar: React.FC = () => {
     <Box sx={{ flexGrow: 1 }} >
       <AppBar position="fixed">
         <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            MovieInfo
-          </Typography>
+        <Typography
+          variant="h6"
+          noWrap
+          component={Link}
+          to="/home"
+          sx={{
+            flexGrow: 1,
+            display: { xs: 'none', sm: 'block' },
+            color: 'inherit', // para manter a cor padrão do texto
+            textDecoration: 'none', // para tirar o sublinhado
+            cursor: 'pointer',
+          }}
+        >
+          MovieInfo
+        </Typography>
           <Icon
             sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}
           >
