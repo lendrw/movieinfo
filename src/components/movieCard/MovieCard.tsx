@@ -9,7 +9,6 @@ interface IMovieCardProps {
     poster: string;
     vote_average: number;
     showLink?: boolean;
-    variant: string;
 }
 
 const imgURL = Environment.MOVIE_IMG;
@@ -22,14 +21,13 @@ export const MovieCard: React.FC<IMovieCardProps> = (
         vote_average, 
         showLink, 
         tagline,
-        variant,
     }
 ) => {
 
     const navigate = useNavigate();
 
     return (
-        <Card sx={{ maxWidth: 550 }}>
+        <Card >
             <CardMedia
                 component="img"
                 image={imgURL + poster}
@@ -48,17 +46,16 @@ export const MovieCard: React.FC<IMovieCardProps> = (
                     flexDirection='column'
                     gap={1}
                 >
-                    <Typography variant={variant} textAlign='center'>
+                    <Typography variant='h6' textAlign='center'>
                         {title}
                     </Typography>
                     <Typography variant="subtitle1" sx={{display: 'flex', alignItems: 'center'}}>
                         <Icon fontSize="inherit">starrate</Icon>&nbsp;{vote_average.toFixed(2)}
                     </Typography>
-
                         {showLink && (
                             <Button 
                                 variant="contained"
-                                onClick={() => navigate(`/movie/${id}`)}
+                                onClick={() => navigate(`/movieinfo/movie/${id}`)}
                                 fullWidth
                             >
                                 Details

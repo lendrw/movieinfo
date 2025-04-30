@@ -3,13 +3,13 @@ import { BaseLayout } from "../../layouts"
 import { DetailBox, LinearBuffer, MovieCard } from "../../components"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { IMovieDetails, MovieService } from "../../services/api/movies/MovieService"
+import { IMoviesList, MovieService } from "../../services/api/movies/MovieService"
 
 
 export const MovieDetails = ( ) => {
     const { id } = useParams<'id'>();
     const [loading, setLoading] = useState(false);
-    const [movie, setMovie] = useState<IMovieDetails>();
+    const [movie, setMovie] = useState<IMoviesList>();
 
     const formatCurrency = (number: number) => {
         return number.toLocaleString("en-US", {
@@ -56,7 +56,6 @@ export const MovieDetails = ( ) => {
                     height='100%'
                 >
                     <MovieCard
-                        variant={"h5"}
                         id={movie.id}
                         title={movie.title}
                         poster={movie.poster_path}

@@ -63,7 +63,7 @@ export const Navbar: React.FC = () => {
     setQuery(value); 
 
     if (value.trim() !== '') {
-        navigate(`/search/${value}/1`);
+        navigate(`/movieinfo/search/${value}/1`);
     } else {
         navigate(`/home`);
     }

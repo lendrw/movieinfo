@@ -58,7 +58,6 @@ export const Home = () => {
                                 key={movie.id} 
                                 size={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 2 }}>
                                 <MovieCard
-                                    variant={"h6"}
                                     id={movie.id}
                                     title={movie.title}
                                     poster={movie.poster_path}

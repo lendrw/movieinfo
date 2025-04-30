@@ -5,10 +5,10 @@ export const AppRoutes = () => {
 
     return (
         <Routes>
-            <Route path="/home" element={<Home/>}/>
-            <Route path="/movie/:id" element={<MovieDetails/>}/>
-            <Route path="/search/:query/:page" element={<Search/>}/>
-            <Route path="*" element={<Navigate to="/home"/>}/>
+            <Route path="/movieinfo/home" element={<Home/>}/>
+            <Route path="/movieinfo/movie/:id" element={<MovieDetails/>}/>
+            <Route path="/movieinfo/search/:query/:page" element={<Search/>}/>
+            <Route path="*" element={<Navigate to="/movieinfo/home"/>}/>
         </Routes>
     )
 }
