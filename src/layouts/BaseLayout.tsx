@@ -29,7 +29,7 @@ export const BaseLayout: React.FC<IBaseLayoutProps> = ({ children, title }) => {
                 margin={1}
             >
                 <Typography 
-                    variant={smDown ? "h5" : mdDown ? "h4" : "h4"}
+                    variant={smDown ? "h6" : mdDown ? "h5" : "h4"}
                     overflow="hidden"
                     textOverflow="ellipsis"
                     width="100%"

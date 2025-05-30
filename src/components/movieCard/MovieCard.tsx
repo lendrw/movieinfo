@@ -46,7 +46,7 @@ export const MovieCard: React.FC<IMovieCardProps> = (
                     flexDirection='column'
                     gap={1}
                 >
-                    <Typography variant='h6' textAlign='center'>
+                    <Typography variant='body1' textAlign='center' fontWeight='bold'>
                         {title}
                     </Typography>
                     <Typography variant="subtitle1" sx={{display: 'flex', alignItems: 'center'}}>

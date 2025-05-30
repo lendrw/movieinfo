@@ -53,7 +53,7 @@ export const Search = () => {
                             {movies.map(movie => (
                                 <Grid 
                                     key={movie.id} 
-                                    size={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 2 }}>
+                                    size={{ xs: 12, sm: 6, md: 6, lg: 4, xl: 2 }}>
                                     <MovieCard
                                         id={movie.id}
                                         title={movie.title}
