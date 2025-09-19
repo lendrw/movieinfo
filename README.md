@@ -1,54 +1,43 @@
-# React + TypeScript + Vite
+# 🎬 Movie Info
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projeto em **React + Vite** que consome a [API TMDB](https://www.themoviedb.org/documentation/api) para exibir informações sobre filmes.  
+A aplicação utiliza **Axios** para requisições HTTP e **MUI (Material UI)** para estilização e componentes prontos.
 
-Currently, two official plugins are available:
+## ✨ Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔍 Pesquisa de filmes pelo nome  
+- 📄 Exibição de informações detalhadas de cada filme  
+- ⭐ Avaliação média dos filmes  
+- 📱 Layout responsivo com **Material UI**  
+- ⏳ Paginação de resultados  
 
-## Expanding the ESLint configuration
+## 🛠️ Tecnologias Utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- [React + Vite](https://vitejs.dev/)  
+- [Axios](https://axios-http.com/)  
+- [MUI - Material UI](https://mui.com/)  
+- [TMDB API](https://www.themoviedb.org/)  
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 📦 Instalação e Uso
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/lendrw/movieinfo.git
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+2. Acesse a pasta do projeto:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+cd movie-info
+
+3. Instale as dependências
+
+npm install
+
+4. Configure o arquivo de ambiente
+
+Crie um arquivo .env na raiz do projeto e adicione sua chave da TMDB:
+
+VITE_API_KEY=SUACHAVEAQUI
+
+5. Execute o projeto
+
+npm run dev
