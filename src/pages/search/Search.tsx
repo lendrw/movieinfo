@@ -62,7 +62,7 @@ export const Search = () => {
       <Box sx={{ width: { xs: "95dvw", lg: "90dvw" } }}>
         {loading && <LinearBuffer />}
         {!loading && movies && (
-          <Grid container margin={1} spacing={2}>
+          <Grid container margin={1} spacing={4}>
             {movies.map((movie) => (
               <Grid
                 key={movie.id}
