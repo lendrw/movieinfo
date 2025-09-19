@@ -16,7 +16,9 @@ Projeto em **React + Vite** que consome a [API TMDB](https://www.themoviedb.org/
 
 ## 📦 Instalação e Uso 
 1. Clone o repositório: 
-```bash git clone https://github.com/lendrw/movieinfo.git ``` 
+  ```bash 
+    git clone https://github.com/lendrw/movieinfo.git 
+  ``` 
 
 2. Acesse a pasta do projeto: 
 ```bash cd movie-info ``` 
