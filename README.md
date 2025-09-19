@@ -26,18 +26,18 @@ A aplicação utiliza **Axios** para requisições HTTP e **MUI (Material UI)** 
 
 2. Acesse a pasta do projeto:
   ```bash
-cd movie-info
+  cd movie-info
 
 3. Instale as dependências
-  ```bash
+  
 npm install
 
 4. Configure o arquivo de ambiente
 
 Crie um arquivo .env na raiz do projeto e adicione sua chave da TMDB:
-  ```bash
+
 VITE_API_KEY=SUACHAVEAQUI
 
 5. Execute o projeto
-  ```bash
+
 npm run dev
