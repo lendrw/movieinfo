@@ -22,7 +22,7 @@ Projeto em **React + Vite** que consome a [API TMDB](https://www.themoviedb.org/
 
 2. Acesse a pasta do projeto: 
   ```bash 
-    cd movie-info 
+    cd movieinfo 
   ``` 
 
 3. Instale as dependências: 
