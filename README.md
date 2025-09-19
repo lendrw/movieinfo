@@ -31,9 +31,9 @@ Projeto em **React + Vite** que consome a [API TMDB](https://www.themoviedb.org/
   ``` 
 
 4. Configure o arquivo de ambiente: 
-Crie um arquivo **.env** na raiz do projeto e adicione sua chave da TMDB: 
+Abra a pasta **environment** e adicione sua chave da TMDB no arquivo: 
   ```bash 
-    VITE_API_KEY=SUACHAVEAQUI 
+    api_key: 'api_key=SUA_CHAVE', 
   ``` 
 
 5. Execute o projeto: 
