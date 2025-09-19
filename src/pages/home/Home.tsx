@@ -29,7 +29,6 @@ export const Home = () => {
 
                     if (result instanceof Error) {
                         alert('Invalid page')
-                        console.log(result);
                     } else {
                         setTotalCount(result.total_results);
                         setTotalPages(result.total_pages);
