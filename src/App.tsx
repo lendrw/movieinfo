@@ -1,5 +1,5 @@
 import './App.css'
-import { Navbar, ErrorBoundary } from './components';
+import { Navbar, ErrorBoundary, ScrollToTop } from './components';
 import { SearchProvider } from './contexts';
 import { AppThemeProvider } from './contexts/ThemeContext';
 import { AppRoutes } from './routes'
@@ -12,6 +12,7 @@ function App() {
       <AppThemeProvider>
         <HashRouter>
           <SearchProvider>
+            <ScrollToTop/>
             <Navbar/>
             <AppRoutes/>
           </SearchProvider>

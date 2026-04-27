@@ -33,6 +33,57 @@ export type TMovies = {
     total_results: number;
 };
 
+export interface IMovieCastMember {
+    id: number;
+    name: string;
+    character: string;
+    profile_path: string | null;
+}
+
+export interface IMovieCrewMember {
+    id: number;
+    name: string;
+    job: string;
+}
+
+export interface IMovieCredits {
+    id: number;
+    cast: IMovieCastMember[];
+    crew: IMovieCrewMember[];
+}
+
+export interface IMovieVideo {
+    id: string;
+    key: string;
+    name: string;
+    site: string;
+    type: string;
+    official: boolean;
+}
+
+export interface IMovieVideos {
+    id: number;
+    results: IMovieVideo[];
+}
+
+export interface IWatchProvider {
+    provider_id: number;
+    provider_name: string;
+    logo_path: string | null;
+}
+
+export interface IWatchRegionProviders {
+    link?: string;
+    flatrate?: IWatchProvider[];
+    rent?: IWatchProvider[];
+    buy?: IWatchProvider[];
+}
+
+export interface IWatchProvidersResponse {
+    id: number;
+    results: Record<string, IWatchRegionProviders>;
+}
+
 export type MovieListCategory = 'top_rated' | 'popular' | 'now_playing' | 'upcoming';
 
 export const MOVIE_LIST_OPTIONS: Array<{
@@ -171,6 +222,66 @@ const getRecommendations = async (
     }
 };
 
+const getCredits = async (id: number): Promise<Result<IMovieCredits>> => {
+    try {
+        const { data } = await Api.get(`${BASE_URL}/${id}/credits`, getAuthConfig());
+
+        return {
+            success: true,
+            data
+        };
+
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load credits.';
+        console.error(errorMessage);
+
+        return {
+            success: false,
+            error: errorMessage
+        };
+    }
+};
+
+const getVideos = async (id: number): Promise<Result<IMovieVideos>> => {
+    try {
+        const { data } = await Api.get(`${BASE_URL}/${id}/videos`, getAuthConfig());
+
+        return {
+            success: true,
+            data
+        };
+
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load videos.';
+        console.error(errorMessage);
+
+        return {
+            success: false,
+            error: errorMessage
+        };
+    }
+};
+
+const getWatchProviders = async (id: number): Promise<Result<IWatchProvidersResponse>> => {
+    try {
+        const { data } = await Api.get(`${BASE_URL}/${id}/watch/providers`, getAuthConfig());
+
+        return {
+            success: true,
+            data
+        };
+
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load watch providers.';
+        console.error(errorMessage);
+
+        return {
+            success: false,
+            error: errorMessage
+        };
+    }
+};
+
 export const getById = async (id: number): Promise<Result<IMoviesList>> => {
 
     try {
@@ -203,6 +314,9 @@ export const MovieService = {
     getMovieList,
     getTopRatedMovies,
     getRecommendations,
+    getCredits,
+    getVideos,
+    getWatchProviders,
     getById,
     getSearchMovie,
 };

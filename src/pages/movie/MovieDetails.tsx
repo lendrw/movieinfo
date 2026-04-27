@@ -1,17 +1,31 @@
-import { Box, Grid, Icon, Typography } from "@mui/material"
+import { Avatar, Box, Button, Chip, Grid, Icon, Paper, Stack, Typography } from "@mui/material"
 import { BaseLayout } from "../../layouts"
 import { DetailBox, LinearBuffer, MovieCard } from "../../components"
 import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
-import { MovieService, type IMoviesList } from "../../services/api/movies/MovieService"
+import { useEffect, useMemo, useState } from "react"
+import {
+    getImageUrl,
+    MovieService,
+    type IMovieCastMember,
+    type IMovieCrewMember,
+    type IMovieVideo,
+    type IMoviesList,
+    type IWatchRegionProviders,
+} from "../../services/api/movies/MovieService"
 import { validateMovieId } from "../../utils";
+import { Environment } from "../../environment";
 
+const WATCH_REGION = Environment.WATCH_REGION;
 
 export const MovieDetails = ( ) => {
     const { id } = useParams<'id'>();
     const [loading, setLoading] = useState(false);
     const [movie, setMovie] = useState<IMoviesList>();
     const [recommendations, setRecommendations] = useState<IMoviesList[]>([]);
+    const [cast, setCast] = useState<IMovieCastMember[]>([]);
+    const [crew, setCrew] = useState<IMovieCrewMember[]>([]);
+    const [videos, setVideos] = useState<IMovieVideo[]>([]);
+    const [watchProviders, setWatchProviders] = useState<IWatchRegionProviders>();
     const [error, setError] = useState<string>('');
 
     const formatCurrency = (number: number) => {
@@ -21,11 +35,39 @@ export const MovieDetails = ( ) => {
         });
     };
 
+    const directors = useMemo(() => {
+        return crew.filter((member) => member.job === 'Director');
+    }, [crew]);
+
+    const trailer = useMemo(() => {
+        const youtubeVideos = videos.filter((video) => video.site === 'YouTube');
+
+        return (
+            youtubeVideos.find((video) => video.type === 'Trailer' && video.official) ||
+            youtubeVideos.find((video) => video.type === 'Trailer') ||
+            youtubeVideos[0]
+        );
+    }, [videos]);
+
+    const streamingProviders = useMemo(() => {
+        return [
+            ...(watchProviders?.flatrate || []),
+            ...(watchProviders?.rent || []),
+            ...(watchProviders?.buy || []),
+        ].filter((provider, index, providers) => {
+            return providers.findIndex((item) => item.provider_id === provider.provider_id) === index;
+        });
+    }, [watchProviders]);
+
     useEffect(() => {
         setLoading(true);
         setError('');
         setMovie(undefined);
         setRecommendations([]);
+        setCast([]);
+        setCrew([]);
+        setVideos([]);
+        setWatchProviders(undefined);
 
         const validation = validateMovieId(id);
         if (!validation.valid) {
@@ -53,6 +95,25 @@ export const MovieDetails = ( ) => {
                     setRecommendations(result.data.results.slice(0, 6));
                 }
             });
+
+        Promise.all([
+            MovieService.getCredits(movieId),
+            MovieService.getVideos(movieId),
+            MovieService.getWatchProviders(movieId),
+        ]).then(([creditsResult, videosResult, providersResult]) => {
+            if (creditsResult.success) {
+                setCast(creditsResult.data.cast.slice(0, 8));
+                setCrew(creditsResult.data.crew);
+            }
+
+            if (videosResult.success) {
+                setVideos(videosResult.data.results);
+            }
+
+            if (providersResult.success) {
+                setWatchProviders(providersResult.data.results[WATCH_REGION]);
+            }
+        });
     }, [id]);
 
     if (error) {
@@ -108,6 +169,26 @@ export const MovieDetails = ( ) => {
                             <Typography variant="body1" textAlign='justify' color="text.secondary">
                                 {movie.overview || 'No overview available.'}
                             </Typography>
+                            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap marginTop={2}>
+                                {directors.length > 0 && (
+                                    <Chip
+                                        icon={<Icon>movie_filter</Icon>}
+                                        label={`Directed by ${directors.map((director) => director.name).join(', ')}`}
+                                        variant="outlined"
+                                    />
+                                )}
+                                {trailer && (
+                                    <Button
+                                        href={`https://www.youtube.com/watch?v=${trailer.key}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        variant="contained"
+                                        startIcon={<Icon>play_circle</Icon>}
+                                    >
+                                        Watch trailer
+                                    </Button>
+                                )}
+                            </Stack>
                         </Box>
                     </Box>
                     <Grid 
@@ -161,6 +242,102 @@ export const MovieDetails = ( ) => {
                             info={movie.original_title}
                         />
                     </Grid>
+                    {(cast.length > 0 || streamingProviders.length > 0) && (
+                        <Box
+                            display="grid"
+                            gridTemplateColumns={{ xs: '1fr', lg: '2fr 1fr' }}
+                            gap={3}
+                            width="100%"
+                        >
+                            {cast.length > 0 && (
+                                <Box width="100%">
+                                    <Typography variant="h5" marginBottom={2}>
+                                        Cast
+                                    </Typography>
+                                    <Grid container spacing={2}>
+                                        {cast.map((member) => (
+                                            <Grid key={member.id} size={{ xs: 6, sm: 4, md: 3 }}>
+                                                <Paper
+                                                    elevation={0}
+                                                    sx={{
+                                                        height: '100%',
+                                                        p: 2,
+                                                        border: 1,
+                                                        borderColor: 'divider',
+                                                        borderRadius: 2,
+                                                        textAlign: 'center',
+                                                    }}
+                                                >
+                                                    <Avatar
+                                                        src={getImageUrl(member.profile_path)}
+                                                        alt={member.name}
+                                                        sx={{
+                                                            width: 72,
+                                                            height: 72,
+                                                            mx: 'auto',
+                                                            mb: 1,
+                                                        }}
+                                                    />
+                                                    <Typography variant="body2" fontWeight={700}>
+                                                        {member.name}
+                                                    </Typography>
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        {member.character}
+                                                    </Typography>
+                                                </Paper>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                </Box>
+                            )}
+                            {streamingProviders.length > 0 && (
+                                <Box width="100%">
+                                    <Typography variant="h5" marginBottom={2}>
+                                        Where to watch
+                                    </Typography>
+                                    <Paper
+                                        elevation={0}
+                                        sx={{
+                                            p: 2,
+                                            border: 1,
+                                            borderColor: 'divider',
+                                            borderRadius: 2,
+                                        }}
+                                    >
+                                        <Typography variant="body2" color="text.secondary" marginBottom={2}>
+                                            Available providers in {WATCH_REGION}
+                                        </Typography>
+                                        <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+                                            {streamingProviders.map((provider) => (
+                                                <Chip
+                                                    key={provider.provider_id}
+                                                    avatar={
+                                                        provider.logo_path
+                                                            ? <Avatar src={getImageUrl(provider.logo_path)} alt={provider.provider_name} />
+                                                            : undefined
+                                                    }
+                                                    label={provider.provider_name}
+                                                    variant="outlined"
+                                                />
+                                            ))}
+                                        </Stack>
+                                        {watchProviders?.link && (
+                                            <Button
+                                                href={watchProviders.link}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                variant="text"
+                                                endIcon={<Icon>open_in_new</Icon>}
+                                                sx={{ mt: 2 }}
+                                            >
+                                                View availability
+                                            </Button>
+                                        )}
+                                    </Paper>
+                                </Box>
+                            )}
+                        </Box>
+                    )}
                     {recommendations.length > 0 && (
                         <Box width="100%">
                             <Typography variant="h5" marginBottom={2}>

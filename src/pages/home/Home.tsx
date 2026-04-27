@@ -71,6 +71,18 @@ export const Home = () => {
                         onChange={handleCategoryChange}
                         variant="scrollable"
                         scrollButtons="auto"
+                        sx={(theme) => ({
+                            "& .MuiTab-root.Mui-selected": {
+                                color: theme.palette.mode === 'dark'
+                                    ? theme.palette.secondary.main
+                                    : theme.palette.primary.main,
+                            },
+                            "& .MuiTabs-indicator": {
+                                backgroundColor: theme.palette.mode === 'dark'
+                                    ? theme.palette.secondary.main
+                                    : theme.palette.primary.main,
+                            },
+                        })}
                         aria-label="movie list categories"
                     >
                         {MOVIE_LIST_OPTIONS.map((option) => (

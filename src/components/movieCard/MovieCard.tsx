@@ -140,7 +140,7 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 0.25,
-                color: "warning.main",
+                color: "text.secondary",
                 maxWidth: "100%",
               }}
             >
