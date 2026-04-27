@@ -6,11 +6,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { Icon, IconButton } from "@mui/material";
+import { Icon, IconButton, Snackbar, Alert } from "@mui/material";
 
 import { useAppThemeContext } from "../../contexts/ThemeContext";
 import { useSearchContext } from "../../contexts";
 import { Link, useNavigate } from "react-router-dom";
+import { validateSearchQuery, sanitizeSearchQuery } from "../../utils";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,16 +58,31 @@ export const Navbar: React.FC = () => {
   const { themeName, toggleTheme } = useAppThemeContext();
   const { setQuery } = useSearchContext();
   const navigate = useNavigate();
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
 
     if (value.trim() !== "") {
-      navigate(`/movieinfo/search/${value}/1`);
+      const sanitized = sanitizeSearchQuery(value);
+      const validation = validateSearchQuery(sanitized);
+      
+      if (!validation.valid) {
+        setSnackbarMessage(validation.message || 'Invalid search');
+        setSnackbarOpen(true);
+        return;
+      }
+      
+      navigate(`/movieinfo/search/${encodeURIComponent(sanitized)}/1`);
     } else {
       navigate(`/home`);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -110,6 +126,16 @@ export const Navbar: React.FC = () => {
           </Search>
         </Toolbar>
       </AppBar>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

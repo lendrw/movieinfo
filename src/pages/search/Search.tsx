@@ -1,4 +1,4 @@
-import { Box, Grid, Pagination } from "@mui/material";
+import { Box, Grid, Pagination, Typography } from "@mui/material";
 import { BaseLayout } from "../../layouts";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -16,6 +16,7 @@ export const Search = () => {
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
+  const [error, setError] = useState<string>('');
 
   const { query = "" } = useParams<{
     query: string;
@@ -38,13 +39,13 @@ export const Search = () => {
 
     debounce(() => {
       MovieService.getSearchMovie(Number(page), query).then((result) => {
-        if (result instanceof Error) {
-          alert("No movies found");
+        if (!result.success) {
+          setError(result.error);
           setMovies([]);
         } else {
-          setTotalCount(result.total_results);
-          setTotalPages(result.total_pages);
-          setMovies(result.results);
+          setTotalCount(result.data.total_results);
+          setTotalPages(result.data.total_pages);
+          setMovies(result.data.results);
         }
         setLoading(false);
       });
@@ -61,7 +62,12 @@ export const Search = () => {
     >
       <Box sx={{ width: { xs: "95dvw", lg: "90dvw" } }}>
         {loading && <LinearBuffer />}
-        {!loading && movies && (
+        {!loading && error && (
+          <Box width="100%" p={2} textAlign="center">
+            <Typography color="error">{error}</Typography>
+          </Box>
+        )}
+        {!loading && !error && movies && (
           <Grid container margin={1} spacing={4}>
             {movies.map((movie) => (
               <Grid

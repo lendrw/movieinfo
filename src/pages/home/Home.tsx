@@ -1,4 +1,4 @@
-import { Box, Grid, Pagination } from "@mui/material"
+import { Box, Grid, Pagination, Typography } from "@mui/material"
 import { BaseLayout } from "../../layouts"
 import { LinearBuffer, MovieCard } from "../../components"
 import { MovieService, IMoviesList } from "../../services/api/movies/MovieService"
@@ -12,6 +12,7 @@ export const Home = () => {
     const [loading, setLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
+    const [error, setError] = useState<string>('');
 
     const { debounce } = useDebounce();
 
@@ -27,12 +28,12 @@ export const Home = () => {
                 .then((result) => {
                     setLoading(false);
 
-                    if (result instanceof Error) {
-                        alert('Invalid page')
+                    if (!result.success) {
+                        setError(result.error);
                     } else {
-                        setTotalCount(result.total_results);
-                        setTotalPages(result.total_pages);
-                        setTopRatedMovies(result.results);
+                        setTotalCount(result.data.total_results);
+                        setTotalPages(result.data.total_pages);
+                        setTopRatedMovies(result.data.results);
                     }
                 })
         })
@@ -52,6 +53,11 @@ export const Home = () => {
                         margin={1} 
                         spacing={2}
                     >
+                        {error && (
+                            <Box width="100%" p={2} textAlign="center">
+                                <Typography color="error">{error}</Typography>
+                            </Box>
+                        )}
                         {topRatedMovies.map(movie => (
                             <Grid 
                                 key={movie.id} 

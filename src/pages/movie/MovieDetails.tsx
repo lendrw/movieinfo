@@ -10,6 +10,7 @@ export const MovieDetails = ( ) => {
     const { id } = useParams<'id'>();
     const [loading, setLoading] = useState(false);
     const [movie, setMovie] = useState<IMoviesList>();
+    const [error, setError] = useState<string>('');
 
     const formatCurrency = (number: number) => {
         return number.toLocaleString("en-US", {
@@ -20,18 +21,29 @@ export const MovieDetails = ( ) => {
 
     useEffect(() => {
         setLoading(true);
+        setError('');
 
         MovieService.getById(Number(id))
             .then((result) => {
                 setLoading(false);
 
-                if (result instanceof Error) {
-                    alert(result.message);
+                if (!result.success) {
+                    setError(result.error);
                 } else {
-                    setMovie(result)
+                    setMovie(result.data);
                 }
             })
     }, [id]);
+
+    if (error) {
+        return (
+          <BaseLayout title="Error">
+            <Box width='100vw' display='flex' justifyContent='center' alignItems='center' minHeight='50vh'>
+                <Typography color="error">{error}</Typography>
+            </Box>
+          </BaseLayout>
+        );
+    }
 
     if (!movie || loading) {
         return (

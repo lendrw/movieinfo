@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { Environment } from "../../environment";
+import { getImageUrl } from "../../services/api/movies/MovieService";
 import { useNavigate } from "react-router-dom";
 interface IMovieCardProps {
   id: number;
@@ -18,8 +18,6 @@ interface IMovieCardProps {
   vote_average: number;
   showLink?: boolean;
 }
-
-const imgURL = Environment.MOVIE_IMG;
 
 export const MovieCard: React.FC<IMovieCardProps> = ({
   id,
@@ -44,7 +42,7 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
     >
       <CardMedia
         component="img"
-        image={imgURL + poster}
+        image={getImageUrl(poster)}
         title={title}
         sx={{
           objectFit: "contain",
