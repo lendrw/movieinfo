@@ -12,6 +12,7 @@ import { useAppThemeContext } from "../../contexts/ThemeContext";
 import { useSearchContext } from "../../contexts";
 import { Link, useNavigate } from "react-router-dom";
 import { validateSearchQuery, sanitizeSearchQuery } from "../../utils";
+import { AppPaths } from "../../routes/paths";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,9 +76,9 @@ export const Navbar: React.FC = () => {
         return;
       }
       
-      navigate(`/movieinfo/search/${encodeURIComponent(sanitized)}/1`);
+      navigate(AppPaths.search(sanitized));
     } else {
-      navigate(`/home`);
+      navigate(AppPaths.home);
     }
   };
 
@@ -93,7 +94,7 @@ export const Navbar: React.FC = () => {
             variant="h6"
             noWrap
             component={Link}
-            to="/home"
+            to={AppPaths.home}
             sx={{
               flexGrow: 1,
               display: { xs: "none", sm: "block" },
@@ -106,7 +107,7 @@ export const Navbar: React.FC = () => {
           </Typography>
           <IconButton
             component={Link}
-            to="/home"
+            to={AppPaths.home}
             sx={{ flexGrow: 1, display: { xs: "flex", sm: "none" } }}
           >
             <Icon>arrow_back</Icon>

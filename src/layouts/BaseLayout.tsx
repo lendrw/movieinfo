@@ -13,32 +13,35 @@ export const BaseLayout: React.FC<IBaseLayoutProps> = ({ children, title }) => {
 
 
     return (
-        <Box 
-            display="flex" 
-            flexDirection="column" 
-            gap={1} 
+        <Box
+            display="flex"
+            flexDirection="column"
+            gap={2}
             alignItems="center"
             marginTop={{xs: '56px', sm: '64px'}}
+            paddingBottom={4}
         >
             <Box
-                padding={1} 
-                height={theme.spacing(smDown ? 6 : mdDown ? 8 : 9)} 
-                display="flex" 
-                alignItems="center" 
+                paddingX={2}
+                paddingTop={3}
+                height={theme.spacing(smDown ? 6 : mdDown ? 8 : 9)}
+                display="flex"
+                alignItems="center"
                 gap={1}
                 margin={1}
             >
-                <Typography 
+                <Typography
                     variant={smDown ? "h6" : mdDown ? "h5" : "h4"}
                     overflow="hidden"
                     textOverflow="ellipsis"
                     width="100%"
                     textAlign="center"
+                    fontWeight={800}
                 >
                     {title}
                 </Typography>
             </Box>
-            <Box display='flex' justifyContent='center'>
+            <Box display='flex' justifyContent='center' width="100%">
                 {children}
             </Box>
         </Box>

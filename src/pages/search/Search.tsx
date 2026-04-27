@@ -2,8 +2,8 @@ import { Box, Grid, Pagination, Typography } from "@mui/material";
 import { BaseLayout } from "../../layouts";
 import { useEffect, useMemo, useState } from "react";
 import {
-  IMoviesList,
   MovieService,
+  type IMoviesList,
 } from "../../services/api/movies/MovieService";
 import { useDebounce } from "../../hooks";
 import { LinearBuffer, MovieCard } from "../../components";
@@ -32,10 +32,12 @@ export const Search = () => {
     if (query.trim() === "") {
       setMovies([]);
       setLoading(false);
+      setError('');
       return;
     }
 
     setLoading(true);
+    setError('');
 
     debounce(() => {
       MovieService.getSearchMovie(Number(page), query).then((result) => {
@@ -46,6 +48,7 @@ export const Search = () => {
           setTotalCount(result.data.total_results);
           setTotalPages(result.data.total_pages);
           setMovies(result.data.results);
+          setError('');
         }
         setLoading(false);
       });
@@ -68,11 +71,11 @@ export const Search = () => {
           </Box>
         )}
         {!loading && !error && movies && (
-          <Grid container margin={1} spacing={4}>
+          <Grid container spacing={{ xs: 2, md: 3 }} justifyContent="center">
             {movies.map((movie) => (
               <Grid
                 key={movie.id}
-                size={{ xs: 12, sm: 6, md: 6, lg: 4, xl: 2 }}
+                size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
               >
                 <MovieCard
                   id={movie.id}

@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Navbar } from "../../components";
 import { BrowserRouter } from "react-router-dom";
+import { AppPaths } from "../../routes/paths";
 
 const toggleThemeMock = vi.fn();
 
@@ -72,20 +73,20 @@ describe("Navbar", () => {
     await userEvent.type(input, "matrix");
 
     expect(useSearchContext().setQuery).toHaveBeenCalledWith("matrix");
-    expect(mockNavigate).toHaveBeenCalledWith("/movieinfo/search/matrix/1");
+    expect(mockNavigate).toHaveBeenCalledWith(AppPaths.search("matrix"));
   });
 
-  test("navega para /home se o input estiver vazio", async () => {
+  test("navega para home se o input estiver vazio", async () => {
     renderWithRouter(<Navbar />);
     const input = screen.getByPlaceholderText(/search/i);
 
     await userEvent.type(input, " ");
-    expect(mockNavigate).toHaveBeenCalledWith("/home");
+    expect(mockNavigate).toHaveBeenCalledWith(AppPaths.home);
   });
 
-  test("link to /home", () => {
+  test("link to home", () => {
     renderWithRouter(<Navbar />);
     const link = screen.getByRole("link", { name: /MovieInfo/i });
-    expect(link).toHaveAttribute("href", "/home");
+    expect(link).toHaveAttribute("href", AppPaths.home);
   });
 });

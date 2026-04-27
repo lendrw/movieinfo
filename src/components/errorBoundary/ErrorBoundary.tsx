@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { AppPaths } from '../../routes/paths';
 
 interface ErrorBoundaryState {
     hasError: boolean;
@@ -62,7 +63,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
                         </Button>
                         <Button
                             variant="outlined"
-                            onClick={() => window.location.href = '/movieinfo/home'}
+                            onClick={() => window.location.hash = AppPaths.home}
                         >
                             Go Home
                         </Button>
