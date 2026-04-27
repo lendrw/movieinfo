@@ -44,6 +44,7 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
         margin: "auto",
         borderRadius: 2,
         overflow: "hidden",
+        boxSizing: "border-box",
         transition: "transform 180ms ease, box-shadow 180ms ease",
         "&:hover": {
           transform: showLink ? "translateY(-4px)" : "none",
@@ -54,7 +55,21 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
       <CardActionArea
         disabled={!showLink}
         onClick={() => showLink && navigate(moviePath)}
-        sx={{ display: "flex", flexDirection: "column", alignItems: "stretch", height: "100%" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          flexGrow: 1,
+          height: "100%",
+          width: "100%",
+          textAlign: "inherit",
+          "& .MuiCardActionArea-focusHighlight": {
+            backgroundColor: "transparent",
+          },
+          "&:hover .MuiCardActionArea-focusHighlight": {
+            opacity: 0,
+          },
+        }}
       >
         {poster ? (
           <CardMedia
@@ -82,22 +97,37 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
             <Icon sx={{ color: "grey.500", fontSize: 48 }}>movie</Icon>
           </Box>
         )}
-        <CardContent sx={{ flexGrow: 1, width: "100%" }}>
+        <CardContent
+          sx={{
+            flexGrow: 1,
+            width: "100%",
+            boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1,
+            px: 2,
+          }}
+        >
           <Box
             display="flex"
-            justifyContent="space-between"
-            alignItems="flex-start"
-            gap={1.5}
+            flexDirection="column"
+            alignItems="center"
+            gap={0.75}
+            sx={{ width: "100%", minWidth: 0 }}
           >
             <Typography
               variant="body1"
               fontWeight={700}
+              textAlign="center"
               sx={{
                 lineHeight: 1.25,
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
                 WebkitLineClamp: 2,
                 overflow: "hidden",
+                width: "100%",
+                overflowWrap: "anywhere",
               }}
             >
               {title}
@@ -106,10 +136,12 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
               variant="body2"
               fontWeight={700}
               sx={{
-                display: "flex",
+                display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
+                gap: 0.25,
                 color: "warning.main",
-                whiteSpace: "nowrap",
+                maxWidth: "100%",
               }}
             >
               <Icon fontSize="inherit">star_rate</Icon>
@@ -129,7 +161,7 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
         </CardContent>
       </CardActionArea>
       {showLink && (
-        <Box px={2} pb={2}>
+        <Box px={2} pb={2} sx={{ boxSizing: "border-box" }}>
           <Button
             variant="contained"
             onClick={() => navigate(moviePath)}
