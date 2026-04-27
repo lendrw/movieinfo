@@ -8,6 +8,7 @@ import {
   Icon,
   Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import React from "react";
 import { getImageUrl } from "../../services/api/movies/MovieService";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,7 @@ interface IMovieCardProps {
   poster: string | null;
   vote_average: number;
   showLink?: boolean;
+  compactAction?: boolean;
 }
 
 export const MovieCard: React.FC<IMovieCardProps> = ({
@@ -29,6 +31,7 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
   vote_average,
   showLink,
   tagline,
+  compactAction,
 }) => {
   const navigate = useNavigate();
   const moviePath = AppPaths.movieDetails(id);
@@ -42,13 +45,20 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
         display: "flex",
         flexDirection: "column",
         margin: "auto",
-        borderRadius: 2,
+        borderRadius: 3,
         overflow: "hidden",
         boxSizing: "border-box",
-        transition: "transform 180ms ease, box-shadow 180ms ease",
+        bgcolor: "background.paper",
+        transition:
+          "transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease",
         "&:hover": {
-          transform: showLink ? "translateY(-4px)" : "none",
-          boxShadow: 8,
+          transform: showLink ? "translateY(-6px)" : "none",
+          boxShadow: (theme) =>
+            `0 24px 56px ${alpha(theme.palette.common.black, theme.palette.mode === "dark" ? 0.38 : 0.16)}`,
+          borderColor: (theme) => alpha(theme.palette.primary.main, 0.38),
+        },
+        "&:hover .movie-card-poster": {
+          transform: showLink ? "scale(1.035)" : "none",
         },
       }}
     >
@@ -71,32 +81,73 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
           },
         }}
       >
-        {poster ? (
-          <CardMedia
-            component="img"
-            image={getImageUrl(poster)}
-            title={title}
-            sx={{
-              aspectRatio: "2 / 3",
-              objectFit: "cover",
-              width: "100%",
-              backgroundColor: "grey.900",
-            }}
-          />
-        ) : (
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            aspectRatio: "2 / 3",
+            overflow: "hidden",
+            backgroundColor: "grey.900",
+          }}
+        >
+          {poster ? (
+            <CardMedia
+              className="movie-card-poster"
+              component="img"
+              image={getImageUrl(poster)}
+              title={title}
+              sx={{
+                height: "100%",
+                objectFit: "cover",
+                width: "100%",
+                transition: "transform 320ms ease",
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Icon sx={{ color: "grey.500", fontSize: 52 }}>movie</Icon>
+            </Box>
+          )}
           <Box
             sx={{
-              aspectRatio: "2 / 3",
-              width: "100%",
-              backgroundColor: "grey.900",
-              display: "flex",
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 36%, rgba(0,0,0,0.58) 100%)",
+              pointerEvents: "none",
+            }}
+          />
+          <Box
+            sx={{
+              position: "absolute",
+              top: 12,
+              right: 12,
+              display: "inline-flex",
               alignItems: "center",
-              justifyContent: "center",
+              gap: 0.5,
+              px: 1,
+              py: 0.45,
+              borderRadius: 999,
+              color: "primary.contrastText",
+              bgcolor: "primary.main",
+              boxShadow: (theme) =>
+                `0 10px 24px ${alpha(theme.palette.common.black, 0.26)}`,
             }}
           >
-            <Icon sx={{ color: "grey.500", fontSize: 48 }}>movie</Icon>
+            <Icon sx={{ fontSize: 16 }}>star_rate</Icon>
+            <Typography variant="caption" fontWeight={800} lineHeight={1}>
+              {vote_average.toFixed(1)}
+            </Typography>
           </Box>
-        )}
+        </Box>
         <CardContent
           sx={{
             flexGrow: 1,
@@ -104,16 +155,16 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
             boxSizing: "border-box",
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            gap: 1,
-            px: 2,
+            alignItems: "flex-start",
+            gap: 1.25,
+            p: 2,
           }}
         >
           <Box
             display="flex"
             flexDirection="column"
             alignItems="center"
-            gap={0.75}
+            gap={0.5}
             sx={{ width: "100%", minWidth: 0 }}
           >
             <Typography
@@ -132,28 +183,17 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
             >
               {title}
             </Typography>
-            <Typography
-              variant="body2"
-              fontWeight={700}
-              sx={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 0.25,
-                color: "text.secondary",
-                maxWidth: "100%",
-              }}
-            >
-              <Icon fontSize="inherit">star_rate</Icon>
-              {vote_average.toFixed(1)}
-            </Typography>
           </Box>
           {tagline && (
             <Typography
               variant="body2"
               color="text.secondary"
-              textAlign="center"
-              sx={{ mt: 1.5 }}
+              sx={{
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 3,
+                overflow: "hidden",
+              }}
             >
               {tagline}
             </Typography>
@@ -164,10 +204,16 @@ export const MovieCard: React.FC<IMovieCardProps> = ({
         <Box px={2} pb={2} sx={{ boxSizing: "border-box" }}>
           <Button
             variant="contained"
+            endIcon={<Icon>arrow_forward</Icon>}
             onClick={() => navigate(moviePath)}
             fullWidth
+            sx={{
+              fontSize: compactAction ? "0.75rem" : undefined,
+              px: compactAction ? 1 : undefined,
+              whiteSpace: "nowrap",
+            }}
           >
-            Details
+            View details
           </Button>
         </Box>
       )}

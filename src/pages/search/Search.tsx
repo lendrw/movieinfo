@@ -16,7 +16,7 @@ export const Search = () => {
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   const { query = "" } = useParams<{
     query: string;
@@ -32,12 +32,12 @@ export const Search = () => {
     if (query.trim() === "") {
       setMovies([]);
       setLoading(false);
-      setError('');
+      setError("");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     debounce(() => {
       MovieService.getSearchMovie(Number(page), query).then((result) => {
@@ -48,7 +48,7 @@ export const Search = () => {
           setTotalCount(result.data.total_results);
           setTotalPages(result.data.total_pages);
           setMovies(result.data.results);
-          setError('');
+          setError("");
         }
         setLoading(false);
       });
@@ -58,12 +58,10 @@ export const Search = () => {
   return (
     <BaseLayout
       title={
-        movies.length > 0
-          ? `Showing results for: '${query}'`
-          : "No movies found"
+        movies.length > 0 ? `Showing results for "${query}"` : "No movies found"
       }
     >
-      <Box sx={{ width: { xs: "95dvw", lg: "90dvw" } }}>
+      <Box sx={{ width: { xs: "94dvw", lg: "90dvw" }, maxWidth: 1440 }}>
         {loading && <LinearBuffer />}
         {!loading && error && (
           <Box width="100%" p={2} textAlign="center">
