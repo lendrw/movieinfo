@@ -1,5 +1,6 @@
 import { Api } from "../axios-config";
 import { Environment } from "../../../environment";
+import type { AxiosRequestConfig } from "axios";
 
 export interface IMovieGenres {
     id: number;
@@ -37,10 +38,36 @@ export type Result<T> =
     | { success: true; data: T }
     | { success: false; error: string };
 
-const API_KEY = `api_key=${Environment.API_KEY}`;
-const BASE_URL = `${Environment.API_BASE_URL}/movie`;
-const SEARCH_URL = `${Environment.API_BASE_URL}/search/movie`;
+const API_KEY = Environment.API_KEY.trim();
+const BASE_URL = '/movie';
+const SEARCH_URL = '/search/movie';
 const IMAGE_BASE_URL = Environment.IMAGE_BASE_URL;
+
+const isBearerToken = (apiKey: string) => apiKey.startsWith('eyJ');
+
+const getAuthConfig = (
+    params: Record<string, string | number> = {},
+): AxiosRequestConfig => {
+    if (!API_KEY) {
+        throw new Error('TMDB API key is missing. Check VITE_API_KEY in your .env file.');
+    }
+
+    if (isBearerToken(API_KEY)) {
+        return {
+            headers: {
+                Authorization: `Bearer ${API_KEY}`,
+            },
+            params,
+        };
+    }
+
+    return {
+        params: {
+            api_key: API_KEY,
+            ...params,
+        },
+    };
+};
 
 export const getImageUrl = (path: string | null): string => {
     if (!path) return '';
@@ -49,7 +76,7 @@ export const getImageUrl = (path: string | null): string => {
 
 const getSearchMovie = async (page = 1, query: string): Promise<Result<TMovies>> => {
     try {
-        const res = await Api.get(`${SEARCH_URL}?${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`);
+        const res = await Api.get(SEARCH_URL, getAuthConfig({ query, page }));
 
         const data = res.data;
 
@@ -76,7 +103,7 @@ const getSearchMovie = async (page = 1, query: string): Promise<Result<TMovies>>
 
 const getTopRatedMovies = async (page = 1): Promise<Result<TMovies>> => {
     try {
-        const res = await Api.get(`${BASE_URL}/top_rated?${API_KEY}&page=${page}`);
+        const res = await Api.get(`${BASE_URL}/top_rated`, getAuthConfig({ page }));
 
         const data = res.data;
 
@@ -104,7 +131,7 @@ const getTopRatedMovies = async (page = 1): Promise<Result<TMovies>> => {
 export const getById = async (id: number): Promise<Result<IMoviesList>> => {
     
     try {
-        const { data } = await Api.get(`${BASE_URL}/${id}?${API_KEY}`);
+        const { data } = await Api.get(`${BASE_URL}/${id}`, getAuthConfig());
 
         if (data) {
             return {
